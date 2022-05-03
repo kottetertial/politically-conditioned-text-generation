@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 
-class AmericanPresidencyPerson:
+class BasePerson:
 
     def __init__(self,
                  url: str,

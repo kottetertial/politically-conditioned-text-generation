@@ -7,7 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
-from scrapers.abstract_scraper import AbstractScraper
+from scrapers.implementation.abstract_scraper import AbstractScraper
 from scrapers.constants import Misc
 
 
@@ -70,6 +70,7 @@ def generate_filename(items: Iterable[str], sep: str = " ", fformat: str = "json
     return preprocess_filename(f"{sep.join(string_items)[:128]}.{fformat}")
 
 
+# TODO: fix regex warnings
 def preprocess_filename(filename: str):
     return re.sub("[<>:\"\/\\\|?*]", "", filename)
 

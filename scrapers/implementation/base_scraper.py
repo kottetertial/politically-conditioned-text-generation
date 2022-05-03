@@ -3,7 +3,7 @@ from typing import Any, Optional, List, Tuple
 
 from selenium.webdriver.remote.webelement import WebElement
 
-from scrapers.abstract_scraper import AbstractScraper
+from scrapers.implementation.abstract_scraper import AbstractScraper
 from scrapers.scraper_utils import check_exists
 
 
