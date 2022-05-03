@@ -7,15 +7,15 @@ from dateutil import parser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from scrapers.american_presidency_project.american_presidency_project_document import AmericanPresidencyDocument
-from scrapers.american_presidency_project.american_presidency_project_person import AmericanPresidencyPerson
-from scrapers.base_scraper import BaseScraper
+from scrapers.model.american_presidency_project.american_presidency_project_document import AmericanPresidencyDocument
+from scrapers.model.american_presidency_project.american_presidency_project_person import AmericanPresidencyPerson
+from scrapers.implementation.base_scraper import BaseScraper
 from scrapers.constants import Tag, Attribute, Source, ClassName, Selector, TargetPath, Misc
 from scrapers.scraper_utils import element_exists, auto_navigate, generate_filename, json_dump, \
     generate_full_path, auto_quit, close_tab, open_new_tab
 
 
-# TODO: use only tags, classes, attributes (not selectors)?
+# TODO: refactor
 class AmericanPresidencyProjectScraper(BaseScraper):
     DOC_COUNTER: int = 0
 
@@ -143,12 +143,12 @@ class AmericanPresidencyProjectScraper(BaseScraper):
     @close_tab
     def __extract_document(self, url: str) -> None:
         self.DOC_COUNTER += 1
-        person_ref: str = self.__extract_person_ref()
-        title: str = self.__extract_title()
-        date: datetime = self.__extract_date()
-        text: str = self.__extract_text()
-        categories: List[str] = self.__extract_category_labels()
-        location: str = self.__extract_location()
+        person_ref: Optional[str] = self.__extract_person_ref()
+        title: Optional[str] = self.__extract_title()
+        date: Optional[datetime] = self.__extract_date()
+        text: Optional[str] = self.__extract_text()
+        categories: Optional[List[str]] = self.__extract_category_labels()
+        location: Optional[str] = self.__extract_location()
         document: AmericanPresidencyDocument = AmericanPresidencyDocument(url,
                                                                           person_ref,
                                                                           title,
@@ -212,11 +212,11 @@ class AmericanPresidencyProjectScraper(BaseScraper):
     @auto_navigate
     @close_tab
     def __extract_person(self, url: str) -> None:
-        name: str = self.__extract_name()
+        name: Optional[str] = self.__extract_name()
         filename: str = generate_full_path(self.PERSON_PATH,
                                            generate_filename([name]))
         if not path.exists(filename):
-            party: str = self.__extract_party()
+            party: Optional[str] = self.__extract_party()
             person: AmericanPresidencyPerson = AmericanPresidencyPerson(url,
                                                                         name,
                                                                         party)

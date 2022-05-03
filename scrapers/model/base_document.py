@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional, List
 
 
-class AmericanPresidencyDocument:
+class BaseDocument:
 
     def __init__(self,
                  url: str,
@@ -18,5 +18,5 @@ class AmericanPresidencyDocument:
         self.date = date
         self.text = text
         self.categories = categories
-        self.location = location
         self.created_timestamp = datetime.now()
+        self.location = location
