@@ -10,7 +10,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from scrapers.model.american_presidency_project.american_presidency_project_document import AmericanPresidencyDocument
 from scrapers.model.american_presidency_project.american_presidency_project_person import AmericanPresidencyPerson
 from scrapers.implementation.base_scraper import BaseScraper
-from scrapers.constants import Tag, Attribute, Source, ClassName, Selector, TargetPath, Misc
+from scrapers.constants import Tag, Attribute, Source, ClassName, Selector, TargetPath, Misc, Env
 from scrapers.scraper_utils import element_exists, auto_navigate, generate_filename, json_dump, \
     generate_full_path, auto_quit, close_tab, open_new_tab
 
@@ -19,8 +19,8 @@ from scrapers.scraper_utils import element_exists, auto_navigate, generate_filen
 class AmericanPresidencyProjectScraper(BaseScraper):
     DOC_COUNTER: int = 0
 
-    DOC_PATH = generate_full_path(Misc.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_DOCS)
-    PERSON_PATH = generate_full_path(Misc.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_PEOPLE)
+    DOC_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_DOCS)
+    PERSON_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_PEOPLE)
 
     def __init__(self) -> None:
         super().__init__(Source.AMERICAN_PRESIDENCY_PROJECT + Source.DOCUMENTS)

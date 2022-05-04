@@ -13,7 +13,7 @@ from scrapers.constants import Misc
 
 def auto_navigate(function: Callable) -> Callable:
     def wrapper(obj: AbstractScraper, *args: Iterable[Any]) -> Any:
-        obj.start(*args)
+        obj.navigate(*args)
         result = function(obj, *args)
         return result
     return wrapper
@@ -67,12 +67,12 @@ def generate_full_path(*args: Iterable[str]) -> str:
 
 def generate_filename(items: Iterable[str], sep: str = " ", fformat: str = "json") -> str:
     string_items: Iterable[str] = map(str, items)
-    return preprocess_filename(f"{sep.join(string_items)[:128]}.{fformat}")
+    return preprocess_filename(f"{sep.join(string_items)}.{fformat}")
 
 
 # TODO: fix regex warnings
 def preprocess_filename(filename: str):
-    return re.sub("[<>:\"\/\\\|?*]", "", filename)
+    return re.sub("[<>:\"\/\\\|?*]", "", filename)[:128]
 
 
 def json_dump(path: str, obj: Any):

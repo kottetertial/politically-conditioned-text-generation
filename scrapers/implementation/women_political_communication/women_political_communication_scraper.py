@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from scrapers.implementation.base_scraper import BaseScraper
-from scrapers.constants import Misc, TargetPath, Source, ClassName, Tag, Attribute, Selector
+from scrapers.constants import Misc, TargetPath, Source, ClassName, Tag, Attribute, Selector, Env
 from scrapers.model.women_political_communication.women_political_communication_document import \
     WomenPoliticalCommunicationDocument
 from scrapers.model.women_political_communication.women_political_communication_person import \
@@ -19,8 +19,8 @@ from scrapers.scraper_utils import generate_full_path, auto_navigate, auto_quit,
 class WomenPoliticalCommunicationScraper(BaseScraper):
     DOC_COUNTER = 0
 
-    DOC_PATH = generate_full_path(Misc.ROOT_PREFIX, TargetPath.WOMEN_POLITICAL_COMMUNICATION_DOCS)
-    PERSON_PATH = generate_full_path(Misc.ROOT_PREFIX, TargetPath.WOMEN_POLITICAL_COMMUNICATION_PEOPLE)
+    DOC_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.WOMEN_POLITICAL_COMMUNICATION_DOCS)
+    PERSON_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.WOMEN_POLITICAL_COMMUNICATION_PEOPLE)
 
     def __init__(self) -> None:
         super().__init__(Source.WOMEN_POLITICAL_COMMUNICATION + Source.SPEAKERS)
