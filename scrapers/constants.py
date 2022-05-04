@@ -8,11 +8,20 @@ class Misc:
     SEP = "/"
     DASH = "—"
     EMPTY = ""
-    ROOT_PREFIX = os.getenv("ROOT_PREFIX")
 
     # The American Presidency Project
     PARTY = "Party"
     PREFLABEL = "prefLabel"
+
+    # The British Political Speech Archive
+    LOCATION = "Location:"
+
+
+class Env:
+    ROOT_PREFIX = os.getenv("ROOT_PREFIX")
+    EXTENSION_ID = os.getenv("EXTENSION_ID")
+    PATH_TO_HTML = os.getenv("PATH_TO_HTML")
+    PATH_TO_VPN_EXTENSION = os.getenv("PATH_TO_VPN_EXTENSION")
 
 
 class Source:
@@ -24,6 +33,10 @@ class Source:
     WOMEN_POLITICAL_COMMUNICATION = "https://awpc.cattcenter.iastate.edu"
     SPEAKERS = "/speakers"
 
+    # The British Political Speech Archive
+    BRITISH_POLITICAL_SPEECH = "http://www.britishpoliticalspeech.org"
+    ARCHIVE = "/speech-archive.htm"
+
 
 class Tag:
     A = "a"
@@ -32,6 +45,7 @@ class Tag:
     H3 = "h3"
     LI = "li"
     TD = "td"
+    TR = "tr"
     DIV = "div"
     BODY = "body"
     TABLE = "table"
@@ -72,6 +86,12 @@ class ClassName:
     PROFILES_LIST = "profiles-list"
     WOMENSPEECH_DATE = "womenspeech-date"
 
+    # The British Political Speech Archive
+    RESULTS_TABLE = "results-table"
+    SPEECH_CONTENT = "speech-content"
+    SPEECH_SPEAKER = "speech-speaker"
+    SPEECH_LOCATION = "speech-location"
+
 
 class Selector:
     # The American Presidency Project
@@ -79,6 +99,9 @@ class Selector:
 
     # The Iowa State University Archives of Women's Political Communication
     POST_CATEGORIES = "div.post-categories.post-meta"
+
+    # VPN
+    BUTTON_SELECTOR = os.getenv("BUTTON_SELECTOR")
 
 
 # TODO: replace concatenation with formatting everywhere
@@ -95,3 +118,6 @@ class TargetPath:
     # The Iowa State University Archives of Women's Political Communication
     WOMEN_POLITICAL_COMMUNICATION_PEOPLE = "{}/women_political_communication/{}".format(DATA, PEOPLE)
     WOMEN_POLITICAL_COMMUNICATION_DOCS = "{}/women_political_communication/{}".format(DATA, DOCUMENTS)
+
+    # The British Political Speech Archive
+    BRITISH_POLITICAL_SPEECH_DOCS = "{}/british_political_speech/{}".format(DATA, DOCUMENTS)
