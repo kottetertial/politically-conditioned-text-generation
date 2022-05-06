@@ -1,7 +1,10 @@
+import logging
 import os
+import re
+import sys
 from datetime import datetime
 from os import path
-from typing import List, Dict, Optional, Tuple, Set, Iterable
+from typing import List, Dict, Optional, Tuple, Set, Iterable, Union
 
 from dateutil import parser
 from selenium.webdriver.common.by import By
@@ -17,14 +20,22 @@ from scrapers.scraper_utils import element_exists, auto_navigate, generate_filen
 
 # TODO: refactor
 class AmericanPresidencyProjectScraper(BaseScraper):
-    DOC_COUNTER: int = 0
-
     DOC_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_DOCS)
     PERSON_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_PEOPLE)
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 extract_categories_at_start: bool = True,
+                 log_level: Union[int, str] = sys.maxsize) -> None:
         super().__init__(Source.AMERICAN_PRESIDENCY_PROJECT + Source.DOCUMENTS)
-        self.categories: List[str] = self.__extract_categories()
+
+        if extract_categories_at_start:
+            self.categories: List[str] = self.__extract_categories()
+        else:
+            self.categories: List[str] = []
+
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.addHandler(logging.StreamHandler())
+        self.logger.setLevel(level=log_level)
 
     @auto_navigate
     def __extract_categories(self) -> List[str]:
@@ -41,42 +52,51 @@ class AmericanPresidencyProjectScraper(BaseScraper):
     @auto_quit
     def run(self) -> None:
         for category in self.categories:
-            self.__extract_rows_from_category(category)
+            self.__extract_data_from_category(category)
 
     @auto_quit
-    def resume_from_page(self, page_url: str, next_category: str) -> None:
-        self.__get_current_doc_count()
-        self.__extract_rows_from_category(page_url)
-        self.resume_from_category(next_category)
+    def run_from_page(self, page_url: str, next_category: str) -> None:
+        self.__extract_data_from_category(page_url)
+        self.run_from_category(next_category)
 
     @auto_quit
-    def resume_from_category(self, url: str) -> None:
-        self.__get_current_doc_count()
+    def run_from_category(self, url: str) -> None:
         remaining_categories: List[str] = self.categories[self.categories.index(url):]
         for category in remaining_categories:
-            self.__extract_rows_from_category(category)
+            self.__extract_data_from_category(category)
+
+    @auto_quit
+    def extract_category(self, url: str) -> None:
+        self.__extract_data_from_category(url)
+
+    @auto_quit
+    def extract_categories_selective(self, urls: List[str]) -> None:
+        for url in urls:
+            self.__extract_data_from_category(url)
 
     @auto_quit
     def extract_items_selective(self, urls: List[str]) -> None:
-        self.__get_current_doc_count()
         self.__extract_documents(urls)
+
         person_urls: Set[str] = {self.__extract_link_to_person_from_doc(url) for url in urls}
         self.__extract_people(person_urls)
 
     @auto_quit
     def extract_docs_selective(self, urls: List[str]) -> None:
-        self.__get_current_doc_count()
         self.__extract_documents(urls)
 
     @auto_quit
     def extract_people_selective(self, urls: List[str]) -> None:
         self.__extract_people(urls)
 
-    def __get_current_doc_count(self) -> None:
-        self.DOC_COUNTER = len(os.listdir(self.DOC_PATH))
+    def __extract_name_from_url(self, url: str) -> str:
+        return re.findall(r'.*/([\w-]+).*', url)[0]
+
+    def __get_current_doc_count(self) -> int:
+        return len(os.listdir(self.DOC_PATH))
 
     @auto_navigate
-    def __extract_rows_from_category(self, url: str) -> None:
+    def __extract_data_from_category(self, url: str) -> None:
         self.__set_max_items_per_page()
         rows: Tuple[Set[Optional[str]], Set[Optional[str]]] = self.__extract_links_to_items()
         self.__extract_data_from_rows(rows)
@@ -84,6 +104,8 @@ class AmericanPresidencyProjectScraper(BaseScraper):
             self.__go_to_the_next_page()
             rows: Tuple[Set[Optional[str]], Set[Optional[str]]] = self.__extract_links_to_items()
             self.__extract_data_from_rows(rows)
+        self.logger.info("Finished scraping category '{}' at {}.".format(self.__extract_name_from_url(url),
+                                                                         datetime.now()))
 
     def __extract_links_to_items(self) -> Tuple[Set[Optional[str]], Set[Optional[str]]]:
         content: Optional[WebElement] = self._find_element(By.CLASS_NAME, ClassName.VIEW_CONTENT)
@@ -142,7 +164,6 @@ class AmericanPresidencyProjectScraper(BaseScraper):
     @auto_navigate
     @close_tab
     def __extract_document(self, url: str) -> None:
-        self.DOC_COUNTER += 1
         person_ref: Optional[str] = self.__extract_person_ref()
         title: Optional[str] = self.__extract_title()
         date: Optional[datetime] = self.__extract_date()
@@ -156,9 +177,12 @@ class AmericanPresidencyProjectScraper(BaseScraper):
                                                                           text,
                                                                           categories,
                                                                           location)
+        doc_count: int = self.__get_current_doc_count() + 1
+        name_from_url: str = self.__extract_name_from_url(url)
         filename: str = generate_full_path(self.DOC_PATH,
-                                           generate_filename([str(self.DOC_COUNTER), title]))
+                                           generate_filename([doc_count, name_from_url]))
         json_dump(filename, document)
+        self.logger.debug("Saved document '{} {}' at {}.".format(doc_count, name_from_url, datetime.now()))
 
     @auto_navigate
     def __extract_link_to_person_from_doc(self, url: str) -> Optional[str]:
@@ -221,6 +245,7 @@ class AmericanPresidencyProjectScraper(BaseScraper):
                                                                         name,
                                                                         party)
             json_dump(filename, person)
+            logging.debug("Saved person '{}' at {}.".format(name, datetime.now()))
 
     def __extract_name(self) -> Optional[str]:
         field_title: Optional[WebElement] = self._find_element(By.CLASS_NAME, ClassName.FIELD_TITLE)
