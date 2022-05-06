@@ -67,7 +67,7 @@ def generate_full_path(*args: Iterable[str]) -> str:
 
 def generate_filename(items: Iterable[str], sep: str = " ", fformat: str = "json") -> str:
     string_items: Iterable[str] = map(str, items)
-    return preprocess_filename(f"{sep.join(string_items)}.{fformat}")
+    return f"{preprocess_filename(sep.join(string_items))}.{fformat}"
 
 
 # TODO: fix regex warnings
