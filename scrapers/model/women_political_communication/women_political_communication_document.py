@@ -1,10 +1,10 @@
 from datetime import datetime
 from typing import Optional, List
 
-from scrapers.model.base_document import BaseDocument
+from scrapers.model.has_person_ref_document import HasPersonRefDocument
 
 
-class WomenPoliticalCommunicationDocument(BaseDocument):
+class WomenPoliticalCommunicationDocument(HasPersonRefDocument):
 
     def __init__(self,
                  url: str,
@@ -14,7 +14,6 @@ class WomenPoliticalCommunicationDocument(BaseDocument):
                  text: Optional[str],
                  categories: Optional[List[str]],
                  location: Optional[str]):
-        super().__init__(url, title, date, text)
-        self.person_ref = person_ref
+        super().__init__(url, person_ref, title, date, text)
         self.categories = categories
         self.location = location

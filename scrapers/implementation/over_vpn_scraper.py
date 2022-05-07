@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from selenium.webdriver.chrome.options import Options
 
-from scrapers.constants import Env
+from constants import Env
 from scrapers.implementation.base_scraper import BaseScraper
 
 

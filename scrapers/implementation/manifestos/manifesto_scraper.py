@@ -5,11 +5,12 @@ from dateutil import parser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from scrapers.constants import Source, Tag, Attribute, Env, TargetPath, Misc
+from constants import Env, TargetPath, SourceUrl, Default
+from scrapers.scraper_constants import Tag, Attribute, Misc
 from scrapers.implementation.base_scraper import BaseScraper
 from scrapers.model.manifestos.manifesto import Manifesto
-from scrapers.scraper_utils import auto_navigate, json_dump, open_new_tab, close_tab, element_exists, \
-    generate_full_path, generate_filename
+from scrapers.scraper_utils import auto_navigate, open_new_tab, close_tab, element_exists
+from utils import generate_full_path, generate_filename, json_dump
 
 
 class ManifestoScraper(BaseScraper):
@@ -21,11 +22,11 @@ class ManifestoScraper(BaseScraper):
 
     def __detect_party(self) -> str:
         match self.starting_point:
-            case Source.LABOUR:
+            case SourceUrl.LABOUR:
                 return "Labour"
-            case Source.LIBERAL:
+            case SourceUrl.LIBERAL:
                 return "Liberal"
-            case Source.CONSERVATIVE:
+            case SourceUrl.CONSERVATIVE:
                 return "Conservative"
 
     @auto_navigate
@@ -39,7 +40,7 @@ class ManifestoScraper(BaseScraper):
             return
 
         link: Optional[WebElement] = self._find_element(By.TAG_NAME, Tag.A, manifesto)
-        date: Optional[datetime] = parser.parse(link.text, default=Misc.DEFAULT_DATETIME) if link else None
+        date: Optional[datetime] = parser.parse(link.text, default=Default.DATETIME) if link else None
         url: Optional[str] = link.get_attribute(Attribute.HREF) if link else None
         if not url:
             return

@@ -6,14 +6,15 @@ from dateutil import parser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from constants import Env, TargetPath, SourceUrl, Symbol
 from scrapers.implementation.base_scraper import BaseScraper
-from scrapers.constants import Misc, TargetPath, Source, ClassName, Tag, Attribute, Selector, Env
+from scrapers.scraper_constants import ClassName, Tag, Attribute, Selector
 from scrapers.model.women_political_communication.women_political_communication_document import \
     WomenPoliticalCommunicationDocument
 from scrapers.model.women_political_communication.women_political_communication_person import \
     WomenPoliticalCommunicationPerson
-from scrapers.scraper_utils import generate_full_path, auto_navigate, auto_quit, open_new_tab, close_tab, \
-    generate_filename, json_dump
+from scrapers.scraper_utils import auto_navigate, auto_quit, open_new_tab, close_tab
+from utils import generate_full_path, generate_filename, json_dump
 
 
 class WomenPoliticalCommunicationScraper(BaseScraper):
@@ -23,7 +24,7 @@ class WomenPoliticalCommunicationScraper(BaseScraper):
     PERSON_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.WOMEN_POLITICAL_COMMUNICATION_PEOPLE)
 
     def __init__(self) -> None:
-        super().__init__(Source.WOMEN_POLITICAL_COMMUNICATION + Source.SPEAKERS)
+        super().__init__(SourceUrl.WOMEN_POLITICAL_COMMUNICATION + SourceUrl.SPEAKERS)
         self.profiles_urls: List[str] = self.__extract_profile_urls()
 
     @auto_navigate
@@ -154,6 +155,6 @@ class WomenPoliticalCommunicationScraper(BaseScraper):
 
     def __extract_location(self) -> Optional[str]:
         date_element: Optional[WebElement] = self.__extract_date_element()
-        if date_element and Misc.DASH in date_element.text:
-            dash_index: int = date_element.text.index(Misc.DASH)
+        if date_element and Symbol.DASH in date_element.text:
+            dash_index: int = date_element.text.index(Symbol.DASH)
             return date_element.text[dash_index + 1:].strip()
