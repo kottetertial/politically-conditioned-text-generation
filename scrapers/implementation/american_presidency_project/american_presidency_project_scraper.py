@@ -10,15 +10,15 @@ from dateutil import parser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
+from constants import Env, TargetPath, SourceUrl
 from scrapers.model.american_presidency_project.american_presidency_project_document import AmericanPresidencyDocument
 from scrapers.model.american_presidency_project.american_presidency_project_person import AmericanPresidencyPerson
 from scrapers.implementation.base_scraper import BaseScraper
-from scrapers.constants import Tag, Attribute, Source, ClassName, Selector, TargetPath, Misc, Env
-from scrapers.scraper_utils import element_exists, auto_navigate, generate_filename, json_dump, \
-    generate_full_path, auto_quit, close_tab, open_new_tab
+from scrapers.scraper_constants import Tag, Attribute, ClassName, Selector, Misc
+from scrapers.scraper_utils import element_exists, auto_navigate, auto_quit, close_tab, open_new_tab
+from utils import generate_full_path, generate_filename, json_dump
 
 
-# TODO: refactor
 class AmericanPresidencyProjectScraper(BaseScraper):
     DOC_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_DOCS)
     PERSON_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.AMERICAN_PRESIDENCY_PROJECT_PEOPLE)
@@ -26,7 +26,7 @@ class AmericanPresidencyProjectScraper(BaseScraper):
     def __init__(self,
                  extract_categories_at_start: bool = True,
                  log_level: Union[int, str] = sys.maxsize) -> None:
-        super().__init__(Source.AMERICAN_PRESIDENCY_PROJECT + Source.DOCUMENTS)
+        super().__init__(SourceUrl.AMERICAN_PRESIDENCY_PROJECT + SourceUrl.DOCUMENTS)
 
         if extract_categories_at_start:
             self.categories: List[str] = self.__extract_categories()

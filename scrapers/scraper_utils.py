@@ -1,14 +1,10 @@
-import json
-import re
 from typing import Union, Callable, Any, Optional, Iterable
 
-import jsonpickle
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from scrapers.implementation.abstract_scraper import AbstractScraper
-from scrapers.constants import Misc
 
 
 def auto_navigate(function: Callable) -> Callable:
@@ -59,22 +55,3 @@ def check_exists(function: Callable) -> Callable:
             return function(obj, by, value, location)
         return None
     return wrapper
-
-
-def generate_full_path(*args: Iterable[str]) -> str:
-    return Misc.SEP.join(args)
-
-
-def generate_filename(items: Iterable[str], sep: str = " ", fformat: str = "json") -> str:
-    string_items: Iterable[str] = map(str, items)
-    return f"{preprocess_filename(sep.join(string_items))}.{fformat}"
-
-
-# TODO: fix regex warnings
-def preprocess_filename(filename: str):
-    return re.sub("[<>:\"\/\\\|?*]", "", filename)[:128]
-
-
-def json_dump(path: str, obj: Any):
-    with open(path, "w", encoding="utf-8") as file:
-        json.dump(jsonpickle.encode(obj), file, ensure_ascii=False, indent=4)

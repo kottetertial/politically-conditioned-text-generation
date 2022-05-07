@@ -8,11 +8,12 @@ from dateutil.parser import parserinfo
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from scrapers.constants import Source, Env, Selector, ClassName, Tag, Attribute, Misc, TargetPath
+from constants import Env, SourceUrl, TargetPath
+from scrapers.scraper_constants import Selector, ClassName, Tag, Attribute, Misc
 from scrapers.implementation.over_vpn_scraper import OverVPNScraper
 from scrapers.model.british_political_speech.british_political_speech_document import BritishPoliticalSpeechDocument
-from scrapers.scraper_utils import auto_navigate, close_tab, auto_quit, open_new_tab, generate_full_path, \
-    generate_filename, json_dump
+from scrapers.scraper_utils import auto_navigate, close_tab, auto_quit, open_new_tab
+from utils import generate_full_path, generate_filename, json_dump
 
 
 class BritishPoliticalSpeechScraper(OverVPNScraper):
@@ -21,7 +22,7 @@ class BritishPoliticalSpeechScraper(OverVPNScraper):
     DOC_PATH = generate_full_path(Env.ROOT_PREFIX, TargetPath.BRITISH_POLITICAL_SPEECH_DOCS)
 
     def __init__(self) -> None:
-        super().__init__(Source.BRITISH_POLITICAL_SPEECH + Source.ARCHIVE)
+        super().__init__(SourceUrl.BRITISH_POLITICAL_SPEECH + SourceUrl.ARCHIVE)
         self._start_vpn()
 
     @auto_navigate
