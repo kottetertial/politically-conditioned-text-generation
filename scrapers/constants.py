@@ -1,5 +1,8 @@
 import os
+from datetime import datetime
+
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -8,6 +11,7 @@ class Misc:
     SEP = "/"
     DASH = "—"
     EMPTY = ""
+    DEFAULT_DATETIME = datetime(1970, 1, 1)
 
     # The American Presidency Project
     PARTY = "Party"
@@ -15,6 +19,10 @@ class Misc:
 
     # The British Political Speech Archive
     LOCATION = "Location:"
+
+    # Manifestos
+    WIN = "Win"
+    FULL_TEXT = "Full Manifesto text in a single long file"
 
 
 class Env:
@@ -37,11 +45,18 @@ class Source:
     BRITISH_POLITICAL_SPEECH = "http://www.britishpoliticalspeech.org"
     ARCHIVE = "/speech-archive.htm"
 
+    # Party Manifestos
+    LABOUR = "http://www.labour-party.org.uk/manifestos/"
+    LIBERAL = "http://www.libdemmanifesto.com/"
+    CONSERVATIVE = "http://www.conservativemanifesto.com/"
+
 
 class Tag:
     A = "a"
+    B = "b"
     P = "p"
     H1 = "h1"
+    H2 = "h2"
     H3 = "h3"
     LI = "li"
     TD = "td"
@@ -121,3 +136,6 @@ class TargetPath:
 
     # The British Political Speech Archive
     BRITISH_POLITICAL_SPEECH_DOCS = "{}/british_political_speech/{}".format(DATA, DOCUMENTS)
+
+    # Manifestos
+    MANIFESTOS = "{}/manifestos/{}".format(DATA, DOCUMENTS)

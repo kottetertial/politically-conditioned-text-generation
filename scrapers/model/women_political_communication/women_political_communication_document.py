@@ -14,6 +14,7 @@ class WomenPoliticalCommunicationDocument(BaseDocument):
                  text: Optional[str],
                  categories: Optional[List[str]],
                  location: Optional[str]):
-        super().__init__(url, title, date, text, location)
+        super().__init__(url, title, date, text)
         self.person_ref = person_ref
         self.categories = categories
+        self.location = location

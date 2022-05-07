@@ -14,6 +14,7 @@ class BritishPoliticalSpeechDocument(BaseDocument):
                  location: Optional[str],
                  party: Optional[str],
                  speaker: Optional[str]):
-        super().__init__(url, title, date, text, location)
+        super().__init__(url, title, date, text)
         self.party = party
         self.speaker = speaker
+        self.location = location
