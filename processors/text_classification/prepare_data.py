@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import datetime
 from multiprocessing import Process
 
 import numpy as np
