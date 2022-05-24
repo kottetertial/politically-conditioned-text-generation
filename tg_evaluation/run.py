@@ -1,5 +1,7 @@
+import csv
 import io
-from csv import DictReader
+from csv import DictReader, DictWriter
+from typing import Tuple, List, Dict
 
 import requests
 from sqlalchemy import func, nullsfirst
@@ -9,14 +11,15 @@ from telegram import Update, ReplyKeyboardMarkup, \
 from telegram.ext import Application, CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
 
 from tg_evaluation.config import BOT_TOKEN, DATABASE_URL, KITTEN_SOURCE
-from tg_evaluation.db import start_database, session_scope
+from tg_evaluation.db import start_database, session_scope, clear_database, get_all_data
 from tg_evaluation.model import Item, Interaction
 from tg_evaluation.utils import admin_tool
 
-EXPECT_READY, EXPECT_RELEVANCE, EXPECT_QUALITY, START_AGAIN, HERO = range(5)
+EXPECT_READY, EXPECT_RELEVANCE, EXPECT_QUALITY, START_AGAIN, CONFIRM_DROP = range(5)
 EVALUATION_KEYBOARD = [["1", "2", "3", "4", "5", "Cancel"]]
 YES_NO_KEYBOARD = [["Yes", "No"]]
 TEXT_FORMAT = "<b>Tag</b>: {}\n<b>Text</b>: {}"
+FAILURE_REPLY = "An error occurred. Please see the logs."
 
 
 async def start(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
@@ -27,28 +30,6 @@ async def start(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
 
 async def help_command(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Use the /get_text command to start evaluating texts.")
-
-
-@admin_tool
-async def add_items(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
-    file: File = await update.message.document.get_file()
-    filebytes: bytearray = await file.download_as_bytearray()
-    filestring: str = filebytes.decode(encoding="utf-8", errors="ignore")
-    reader: DictReader = DictReader(io.StringIO(filestring), delimiter="\t")
-
-    await update.message.reply_text("Started uploading new items...")
-    failure_reply: str = "An error occurred. Please see the logs."
-
-    async with session_scope(Session, update, failure_reply) as session:
-        counter: int = 0
-        for i in reader:
-            counter += 1
-            item = Item(
-                label=i["Class"],
-                content=i["Text"]
-            )
-            session.add(item)
-        await update.message.reply_text(f"Successfully uploaded {counter} items!")
 
 
 async def get_text(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
@@ -91,7 +72,7 @@ async def get_text(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int
                                         parse_mode="html",
                                         reply_markup=ReplyKeyboardMarkup([["Evaluate"]],
                                                                          resize_keyboard=True))
-        return EXPECT_READY
+    return EXPECT_READY
 
 
 async def kitten(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
@@ -137,13 +118,13 @@ async def evaluate_quality(update: Update, context: CallbackContext.DEFAULT_TYPE
         )
         session.add(interaction)
 
-        await update.message.reply_text("Thank you for your response! Would you like to evaluate another text?",
-                                        reply_markup=ReplyKeyboardMarkup(
-                                            YES_NO_KEYBOARD,
-                                            one_time_keyboard=True,
-                                            resize_keyboard=True
-                                        ))
-        return START_AGAIN
+    await update.message.reply_text("Thank you for your response! Would you like to evaluate another text?",
+                                    reply_markup=ReplyKeyboardMarkup(
+                                        YES_NO_KEYBOARD,
+                                        one_time_keyboard=True,
+                                        resize_keyboard=True
+                                    ))
+    return START_AGAIN
 
 
 async def cancel(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
@@ -151,6 +132,67 @@ async def cancel(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
                                     reply_markup=ReplyKeyboardRemove())
     context.user_data.clear()
     return ConversationHandler.END
+
+
+@admin_tool
+async def add_items(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+    file: File = await update.message.document.get_file()
+    filebytes: bytearray = await file.download_as_bytearray()
+    filestring: str = filebytes.decode(encoding="utf-8", errors="ignore")
+    reader: DictReader = DictReader(io.StringIO(filestring), delimiter="\t")
+
+    await update.message.reply_text("Started uploading new items...")
+
+    async with session_scope(Session, update, FAILURE_REPLY) as session:
+        counter: int = 0
+        for i in reader:
+            counter += 1
+            item = Item(
+                label=i["Class"],
+                content=i["Text"]
+            )
+            session.add(item)
+
+    await update.message.reply_text(f"Successfully uploaded {counter} items!")
+
+
+@admin_tool
+async def export_all(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+    async with session_scope(Session, update, FAILURE_REPLY) as session:
+        data: Dict[str, List[Tuple]] = get_all_data(session)
+
+    for tablename, content in data.items():
+        sio: io.StringIO = io.StringIO()
+        writer: csv.writer = csv.writer(sio)
+        writer.writerows(map(lambda x: x[1:], content))
+        sio.seek(0)
+
+        bytefile: io.BytesIO = io.BytesIO(sio.getvalue().encode(encoding="utf-8", errors="ignore"))
+        document: io.BufferedReader = io.BufferedReader(bytefile)
+
+        await update.message.reply_document(document,
+                                            f"{tablename}.csv")
+
+
+@admin_tool
+async def drop_all(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
+    await update.message.reply_text("Are you sure you want to delete all data?",
+                                    reply_markup=ReplyKeyboardMarkup(
+                                        YES_NO_KEYBOARD,
+                                        resize_keyboard=True
+                                    ))
+    return CONFIRM_DROP
+
+
+@admin_tool
+async def drop_all_confirmed(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+    async with session_scope(Session) as session:
+        clear_database(session)
+        await update.message.reply_text("Successfully cleared all data!",
+                                        reply_markup=ReplyKeyboardRemove())
+
+
+DEFAULT_FALLBACKS = [CommandHandler("cancel", cancel), MessageHandler(filters.Regex("[cC]ancel"), cancel)]
 
 
 def main() -> None:
@@ -168,10 +210,17 @@ def main() -> None:
             START_AGAIN: [MessageHandler(filters.Regex("[yY]es"), get_text),
                           MessageHandler(filters.Regex("[nN]o"), cancel)]
         },
-        fallbacks=[CommandHandler("cancel", cancel),
-                   MessageHandler(filters.Regex("[cC]ancel"), cancel)]
+        fallbacks=DEFAULT_FALLBACKS
     ))
     application.add_handler(CommandHandler("kitten", kitten))
+    application.add_handler(ConversationHandler(
+        entry_points=[CommandHandler("drop_all", drop_all)],
+        states={
+            CONFIRM_DROP: [MessageHandler(filters.Regex("[yY]es"), drop_all_confirmed)]
+        },
+        fallbacks=DEFAULT_FALLBACKS
+    ))
+    application.add_handler(CommandHandler("export_all", export_all))
 
     application.run_polling()
 
