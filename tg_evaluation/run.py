@@ -1,6 +1,6 @@
 import csv
 import io
-from csv import DictReader, DictWriter
+from csv import DictReader
 from typing import Tuple, List, Dict
 
 import requests
@@ -15,6 +15,7 @@ from tg_evaluation.db import start_database, session_scope, clear_database, get_
 from tg_evaluation.model import Item, Interaction
 from tg_evaluation.utils import admin_tool
 
+
 EXPECT_READY, EXPECT_RELEVANCE, EXPECT_QUALITY, START_AGAIN, CONFIRM_DROP = range(5)
 EVALUATION_KEYBOARD = [["1", "2", "3", "4", "5", "Cancel"]]
 YES_NO_KEYBOARD = [["Yes", "No"]]
@@ -24,12 +25,28 @@ FAILURE_REPLY = "An error occurred. Please see the logs."
 
 async def start(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
     user = update.effective_user
-    await update.message.reply_html(rf"Hi {user.mention_html()}!")
-    await help_command(update, context)
+    await update.message.reply_html("Hi {}! "
+                                    "\nTo get more info about the project, use the /help command. "
+                                    "\nTo start evaluating texts, use the /get_text command.".format(user.full_name))
 
 
 async def help_command(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Use the /get_text command to start evaluating texts.")
+    await update.message.reply_text("This is a tool developed as part of an NLP project. "
+                                    "The aim of the project is to devise a model to automatically generate "
+                                    "politically-conditioned texts. That is, texts produced my the model are supposed "
+                                    "to somehow reflect political views of a person "
+                                    "who identifies as a liberal or a conservative. "
+                                    "The political leaning is defined by the user "
+                                    "and the model is supposed to generate some text relevant to the condition. "
+                                    "\n\nThe purpose of this tool is to evaluate the produced texts "
+                                    "in terms of their quality (fluency) and relevance to the condition. "
+                                    "Both parameters are evaluated from 1 to 5, "
+                                    "where 1 means not fluent/relevant at all, "
+                                    "and 5 stands for very fluent/very relevant. "
+                                    "\n\nYou are kindly asked to take part in the evaluation! "
+                                    "\n\nUse the /get_text command to get a text produced by the model "
+                                    "and the tag it was generated under. "
+                                    "After that, you will be prompted to start the evaluation.")
 
 
 async def get_text(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
@@ -185,11 +202,12 @@ async def drop_all(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int
 
 
 @admin_tool
-async def drop_all_confirmed(update: Update, context: CallbackContext.DEFAULT_TYPE) -> None:
+async def drop_all_confirmed(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int:
     async with session_scope(Session) as session:
         clear_database(session)
         await update.message.reply_text("Successfully cleared all data!",
                                         reply_markup=ReplyKeyboardRemove())
+    return ConversationHandler.END
 
 
 DEFAULT_FALLBACKS = [CommandHandler("cancel", cancel), MessageHandler(filters.Regex("[cC]ancel"), cancel)]
