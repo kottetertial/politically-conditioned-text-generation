@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
-from typing import Optional, List, Any, Tuple, Dict
+from typing import Optional, List, Tuple, Dict
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from telegram import Update
 
-from tg_evaluation.config import LOGGER
-from tg_evaluation.model import Base
+from evaluation.tg_evaluation.config import LOGGER
+from evaluation.tg_evaluation.model import Base
 
 
 def start_database(url: str, base: declarative_base = Base) -> sessionmaker:

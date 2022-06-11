@@ -10,10 +10,10 @@ from telegram import Update, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove, File
 from telegram.ext import Application, CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
 
-from tg_evaluation.config import BOT_TOKEN, DATABASE_URL, KITTEN_SOURCE
-from tg_evaluation.db import start_database, session_scope, clear_database, get_all_data
-from tg_evaluation.model import Item, Interaction
-from tg_evaluation.utils import admin_tool
+from evaluation.tg_evaluation.config import BOT_TOKEN, DATABASE_URL, KITTEN_SOURCE
+from evaluation.tg_evaluation.db import start_database, session_scope, clear_database, get_all_data
+from evaluation.tg_evaluation.model import Item, Interaction
+from evaluation.tg_evaluation.utils import admin_tool
 
 
 EXPECT_READY, EXPECT_RELEVANCE, EXPECT_QUALITY, START_AGAIN, CONFIRM_DROP = range(5)
