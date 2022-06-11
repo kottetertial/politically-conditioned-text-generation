@@ -1,0 +1,112 @@
+<mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" background="none" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="node4" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;abc.ABC&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="1278" y="128" width="89" height="31" as="geometry" />
+    </mxCell>
+    <mxCell id="node2" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;abc.ABCMeta&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __abstractmethods__: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self, name: str, bases: tuple[type, ...], namespace: dict[str, Any]): &lt;br/&gt; __instancecheck__(cls: ABCMeta, instance: Any): &lt;br/&gt; __subclasscheck__(cls: ABCMeta, subclass: Any): &lt;br/&gt; _dump_registry(cls: ABCMeta, file: SupportsWrite[str] | None = ...): &lt;br/&gt; register(cls: ABCMeta, subclass: type[_T]): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="1152" y="-88" width="341" height="166" as="geometry" />
+    </mxCell>
+    <mxCell id="node8" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.abstract_scraper.AbstractScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; driver: &lt;br/&gt; starting_point: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self, starting_point: str): &lt;br/&gt; _configure_driver_options(self): &lt;br/&gt; __configure_driver(self): &lt;br/&gt; navigate(self, url: Optional[str] = None): &lt;br/&gt; open_new_tab(self, url: str): &lt;br/&gt; run(self): &lt;br/&gt; switch_to_first_tab(self): &lt;br/&gt; close_tab(self): &lt;br/&gt; stop(self): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="1171" y="209" width="417" height="276" as="geometry" />
+    </mxCell>
+    <mxCell id="node3" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.american_presidency_project.american_presidency_project_scraper.AmericanPresidencyProjectScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; logger: &lt;br/&gt; categories: &lt;br/&gt; DOC_PATH: &lt;br/&gt; PERSON_PATH: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self,                  extract_categories_at_start: bool = True,                  log_level: Union[int, str] = sys.maxsize): &lt;br/&gt; __extract_categories(self): &lt;br/&gt; run(self): &lt;br/&gt; run_from_page(self, page_url: str, next_category: str): &lt;br/&gt; run_from_category(self, url: str): &lt;br/&gt; extract_category(self, url: str): &lt;br/&gt; extract_categories_selective(self, urls: List[str]): &lt;br/&gt; extract_items_selective(self, urls: List[str]): &lt;br/&gt; extract_docs_selective(self, urls: List[str]): &lt;br/&gt; extract_people_selective(self, urls: List[str]): &lt;br/&gt; __extract_name_from_url(self, url: str): &lt;br/&gt; __get_current_doc_count(self): &lt;br/&gt; __extract_data_from_category(self, url: str): &lt;br/&gt; __extract_links_to_items(self): &lt;br/&gt; __extract_data_from_rows(self, rows: Tuple[Set[Optional[str]], Set[Optional[str]]]): &lt;br/&gt; __set_max_items_per_page(self): &lt;br/&gt; __go_to_the_next_page(self): &lt;br/&gt; __extract_link_to_document(self, row: WebElement): &lt;br/&gt; __extract_link_to_person(self, row: WebElement): &lt;br/&gt; __extract_documents(self, doc_links: Iterable[Optional[str]]): &lt;br/&gt; __extract_people(self, person_links: Iterable[Optional[str]]): &lt;br/&gt; __extract_document(self, url: str): &lt;br/&gt; __extract_link_to_person_from_doc(self, url: str): &lt;br/&gt; __extract_person_ref(self): &lt;br/&gt; __extract_title(self): &lt;br/&gt; __extract_date(self): &lt;br/&gt; __extract_text(self): &lt;br/&gt; __extract_meta(self): &lt;br/&gt; __extract_category_labels(self): &lt;br/&gt; __extract_location(self): &lt;br/&gt; __extract_person(self, url: str): &lt;br/&gt; __extract_name(self): &lt;br/&gt; __extract_party(self): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="2089" y="667" width="873" height="848" as="geometry" />
+    </mxCell>
+    <mxCell id="node0" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.base_scraper.BaseScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; _find_element(self, by: str, value: Any, location: Optional[WebElement] = None): &lt;br/&gt; _find_embedded_element(self, by_value: List[Tuple[str, Any]], location: Optional[WebElement] = None): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="1304" y="539" width="371" height="82" as="geometry" />
+    </mxCell>
+    <mxCell id="node5" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.british_political_speech.british_political_speech_scraper.BritishPoliticalSpeechScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; DOC_COUNTER: &lt;br/&gt; DOC_PATH: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self): &lt;br/&gt; run(self): &lt;br/&gt; _start_vpn(self): &lt;br/&gt; __extract_data_from_entry(self, entry: WebElement): &lt;br/&gt; __extract_date(self, entry: WebElement): &lt;br/&gt; __extract_href(self, entry: WebElement): &lt;br/&gt; __extract_text_info(self, url: str): &lt;br/&gt; __extract_location(self): &lt;br/&gt; __extract_text(self): &lt;br/&gt; __extract_speaker_from_text(self): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="-39" y="1565" width="760" height="298" as="geometry" />
+    </mxCell>
+    <mxCell id="node1" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.manifestos.manifesto_scraper.ManifestoScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; party: &lt;br/&gt; DOC_PATH: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self, starting_point: str): &lt;br/&gt; __detect_party(self): &lt;br/&gt; run(self): &lt;br/&gt; __extract_manifesto(self, manifesto: WebElement): &lt;br/&gt; __extract_text(self, url: str): &lt;br/&gt; __extract_text_row(self): &lt;br/&gt; __extract_title(self, text_row: WebElement): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="1553" y="975" width="516" height="232" as="geometry" />
+    </mxCell>
+    <mxCell id="node6" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.over_vpn_scraper.OverVPNScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; _configure_driver_options(self): &lt;br/&gt; _start_vpn(self): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="128" y="1053" width="427" height="82" as="geometry" />
+    </mxCell>
+    <mxCell id="node7" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;scrapers.implementation.women_political_communication.women_political_communication_scraper.WomenPoliticalCommunicationScraper&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; profiles_urls: &lt;br/&gt; DOC_COUNTER: &lt;br/&gt; DOC_PATH: &lt;br/&gt; PERSON_PATH: &lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; __init__(self): &lt;br/&gt; __extract_profile_urls(self): &lt;br/&gt; run(self): &lt;br/&gt; __extract_data_from_profile(self, url: str): &lt;br/&gt; __extract_person(self, url: str): &lt;br/&gt; __extract_name(self): &lt;br/&gt; __extract_info_table(self): &lt;br/&gt; __extract_info_entry_content(self, entry: Optional[WebElement]): &lt;br/&gt; __extract_party(self): &lt;br/&gt; __extract_website(self): &lt;br/&gt; __extract_document(self, url: str): &lt;br/&gt; __extract_person_ref(self): &lt;br/&gt; __extract_title(self): &lt;br/&gt; __extract_date_element(self): &lt;br/&gt; __extract_date(self): &lt;br/&gt; __extract_date_string(self, date: str): &lt;br/&gt; __extract_text(self): &lt;br/&gt; __extract_categories(self): &lt;br/&gt; __extract_location(self): &lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="575" y="821" width="958" height="540" as="geometry" />
+    </mxCell>
+    <mxCell id="edge9" edge="1" value="" parent="1" source="node4" target="node2" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=1;startArrow=classic;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.002;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="label58" parent="edge9" vertex="1" connectable="0" value="isinstanceof" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
+      <mxGeometry x="1252" y="83" as="geometry" />
+    </mxCell>
+    <mxCell id="edge5" edge="1" value="" parent="1" source="node8" target="node4" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.001;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1380" y="183" />
+          <mxPoint x="1323" y="183" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge0" edge="1" value="" parent="1" source="node3" target="node0" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2525" y="646" />
+          <mxPoint x="1489" y="646" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge2" edge="1" value="" parent="1" source="node0" target="node4" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.001;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1489" y="512" />
+          <mxPoint x="1599" y="512" />
+          <mxPoint x="1599" y="183" />
+          <mxPoint x="1323" y="183" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge6" edge="1" value="" parent="1" source="node0" target="node8" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1489" y="512" />
+          <mxPoint x="1380" y="512" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge8" edge="1" value="" parent="1" source="node5" target="node6" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge4" edge="1" value="" parent="1" source="node1" target="node0" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1811" y="646" />
+          <mxPoint x="1489" y="646" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge3" edge="1" value="" parent="1" source="node6" target="node4" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.001;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="341" y="183" />
+          <mxPoint x="1323" y="183" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge1" edge="1" value="" parent="1" source="node6" target="node0" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.001;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="341" y="636" />
+          <mxPoint x="1489" y="636" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="edge7" edge="1" value="" parent="1" source="node7" target="node0" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=block;startSize=12;endArrow=none;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1054" y="646" />
+          <mxPoint x="1489" y="646" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
