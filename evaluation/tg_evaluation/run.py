@@ -79,7 +79,7 @@ async def get_text(update: Update, context: CallbackContext.DEFAULT_TYPE) -> int
 
         if not text_to_evaluate:
             context.user_data["hero"] = "Looks like you've evaluated all available texts! I'm very grateful for your " \
-                                        "help. Feel free to come back later for new ones. Get the kitten for now :)"
+                                        "help. Feel free to come back later for new ones. Get the /kitten for now :)"
             await kitten(update, context)
             context.user_data.clear()
             return ConversationHandler.END
