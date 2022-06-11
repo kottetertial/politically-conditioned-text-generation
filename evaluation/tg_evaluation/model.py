@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, SmallInteger, ForeignKey, Integer
+from sqlalchemy import Column, String, Text, SmallInteger, ForeignKey, Integer, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -17,7 +17,7 @@ class Item(Base):
 
 class Interaction(Base):
     __tablename__ = "interaction"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     item_id = Column(Integer, ForeignKey("item.id"), primary_key=True)
     relevance = Column(SmallInteger)
     quality = Column(SmallInteger)
